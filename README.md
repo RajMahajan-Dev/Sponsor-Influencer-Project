@@ -3,7 +3,7 @@
 A full-stack web application to manage influencer marketing campaigns by connecting sponsors and influencers on a common platform.
 It offers secure user roles, campaign management, ad requests, profile updates, and real-time stats—all in one place.
 
-🔗 Live Demo: [HomeZen App](https://sponsor-influencer-project.onrender.com/) 
+🔗 Live Demo: [Sponsor Influencer Project](https://sponsor-influencer-project.onrender.com/) 
 
 ## 🚀 Features
 🧑‍💼 Role-based Access (Admin / Sponsor / Influencer)
