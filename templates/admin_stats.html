@@ -1,0 +1,164 @@
+{% extends 'home.html' %}
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+{% block head %}
+<style>
+  
+</style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Adrequest Status'],
+          ['Payment Relesed',     {{adrequests.pr}}],
+          ['Completed',      {{adrequests.c}}],
+          ['Accepted',  {{adrequests.a}}],
+          ['Pending', {{adrequests.p}}],
+          ['Rejected',    {{adrequests.r}}]
+        ]);
+
+        var options = {
+          title: 'Adrequest Status',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Total Users'],
+          ['Sponsor',     {{sp}}],
+          ['Influencer',      {{inf}}],
+          ['Flaged',  {{flag}}]
+        ]);
+
+        var options = {
+          title: 'Users Pie Chart', 
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Total Users'],
+          ['Active',     {{sp+inf}}],
+          ['Flaged',  {{flag}}]
+        ]);
+
+        var options = {
+          title: 'Users Pie Chart', 
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Influencers", "Revenue", { role: "style" } ],
+        {% for element in elements %}["{{ element.name }}", {{ element.Revenue }}, "{{ element.color }}"],{% endfor %}
+        ]);
+  
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+                         { calc: "stringify",
+                           sourceColumn: 1,
+                           type: "string",
+                           role: "annotation" },
+                         2]);
+  
+        var options = {
+          title: "All Influencer Revenue in $",
+          width: 700,
+          height: 500,
+          bar: {groupWidth: "95%"},
+          legend: { position: "none" },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
+    }
+    </script>
+{% endblock %}
+{% block Body %}
+
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+<!-- Top Start -->
+<div style="background-color: rgb(120, 244, 106); margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+  <div class="container-fluid" style="margin: 0px;">
+      <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+      <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Admin Dashboard > Statistics</h2></div>
+      
+      <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <div class="offcanvas-header">
+          <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <hr  style="color: gold; opacity: 0.8;">
+      <div class="offcanvas-body">
+          
+          <div>
+              <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard">Dashboard</a>
+          </div>
+          <div>
+            <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+        </div>
+          <div style="margin-top: auto;">
+              <div>
+                  <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+              </div>
+              <div>
+                  <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<!-- Top End -->
+<div class="row">
+    <div class="col" id="piechart" style="width: 700px; height: 700px;"></div>
+    <div class="col" id="piechart1" style="width: 700px; height: 700px;"></div>
+</div>
+<div class="row">
+  <div class="col" id="columnchart_values" style="width: 900px; height: 300px;"></div>
+  <div class="col" id="piechart_3d" style="width: 900px; height: 500px;"></div>
+</div>
+    
+
+{% endblock %}
+

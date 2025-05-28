@@ -1,0 +1,439 @@
+{% extends 'home.html' %}
+{% block title %}
+    Sponsor Dashboard
+{% endblock %}
+{% block head %}
+<style>
+.offcanvas-body {
+    display: flex;
+    flex-direction: column;
+}
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body  {
+        height: 90%;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .bg-m {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(98, 225, 115, 0.162);
+        padding: 10px 30px 5px 30px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg {
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(98, 225, 115, 0.162);
+        padding: 30px 30px 300px 10px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg img {
+        width: 640px;
+        height: 360px;
+        border-radius: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .alert {
+        width: 70%;
+        margin: 0px;
+        height: 60px;
+        padding: 10px;
+        border-color: rgba(0, 0, 0, 0.5);
+    }
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        width: 50%;
+        height: 100%;
+    }
+    .width {
+        width: 437px;
+    }
+    .row-m a {
+        display: flex;
+    }
+    .row-m i {
+        margin: 60px;
+        margin-left: 90px;
+    }
+    
+</style>
+{% endblock %}
+{% block Body %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+
+<!-- Top Start -->
+<div style="background-color: red; margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+    <div class="container-fluid" style="margin: 0px;">
+        <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+        <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Sponsor Dashboard > AD-Requests</h2></div>
+        
+        <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <hr  style="color: gold; opacity: 0.8;">
+        <div class="offcanvas-body">
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/profile">Profile</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard">Dashboard</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard/campaigns">Campaigns</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/find">Find</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/stats">Statistics</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+            </div>
+            <div style="margin-top: auto;">
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Top End -->
+ <!-- Modal Create -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create AD-request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{url_for('authentication.adrequests', id=campaign.campaign_id)}}" id="campaigncreateform">
+                <fieldset disabled>
+                <div class="mb-3">
+                  <label for="adreq_name" class="col-form-label">AD-request Name</label>
+                  <input type="text" class="form-control" id="adreq_name" value="AD-request No {{last_adreq_id + 1}}">
+                </div>
+                </fieldset>
+                <div class="mb-3" hidden>
+                  <label for="camp" class="col-form-label"></label>
+                  <input class="form-control" name="camp" id="camp" value="{{campaign.campaign_id}}"></input>
+                </div>
+                <div class="mb-3" hidden>
+                    <label for="visit" class="col-form-label"></label>
+                    <input class="form-control" name="visit" id="visit" value="False"></input>
+                  </div>
+                <div class="mb-3">
+                  <label for="description" class="col-form-label">Description </label>
+                  <input class="form-control" name="description" id="description" required></input>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="budget" id="budget" placeholder="Budget" required>
+                        <label for="budget" class="col-form-label">Your Budget </label>
+                    </div>
+                </div>
+                <div class="col-sm-12 mb-3">
+                    <label class="col-form-label">Preference</label>
+                    <div>
+                        <input type="radio" id="public" name="preference" value="public" checked>
+                        <label for="public">Public</label>
+                        <input type="radio" id="private" name="preference" value="private">
+                        <label for="private">Private</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 mb-3">
+                        <label for="req" class="col-form-label">Channel / Requirements</label>
+                        <select class="form-select" id="req" name="req" aria-label="Default select example" required>
+                            <option value="None" selected>Open this select menu</option>
+                            <option value="1">Fashion</option>
+                            <option value="2">Food</option>
+                            <option value="3">Technology</option>
+                            <option value="4">Health</option>
+                            <option value="5">Fitness</option>
+                            <option value="6">Music</option>
+                            <option value="7">Photography</option>
+                            <option value="8">Art</option>
+                            <option value="9">Entertainment</option>
+                            <option value="10">Education</option>
+                            <option value="11">Business</option>
+                            <option value="12">Marketing</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 mb-5 text-center">
+                        <span>or</span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label for="influencer" class="col-form-label">Influencer (Private Request)</label>
+                        <select class="form-select" id="influencer" name="influencer" aria-label="Default select example" required>
+                            <option value="None" selected>Open this select menu</option>
+                            {% for influencer in influencers %}
+                                <option value="{{ influencer.influencer_id }}">{{ influencer.user.user_handle }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>                        
+                                         
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const publicRadio = document.getElementById('public');
+        const privateRadio = document.getElementById('private');
+        const reqSelect = document.getElementById('req');
+        const influencerSelect = document.getElementById('influencer');
+
+        function toggleSelect() {
+            if (publicRadio.checked) {
+                reqSelect.disabled = false;
+                influencerSelect.disabled = true;
+                influencerSelect.value = "None";
+            } else if (privateRadio.checked) {
+                reqSelect.disabled = true;
+                influencerSelect.disabled = false;
+                reqSelect.value = "None"; 
+            }
+        }
+
+        publicRadio.addEventListener('change', toggleSelect);
+        privateRadio.addEventListener('change', toggleSelect);
+        toggleSelect();
+
+    });
+</script>
+<!-- Modal End -->
+
+<div class="container bg">
+    <!-- Ad View start -->
+<div class="container" style="max-width: 93%;margin-right: 20px; margin-left: 40px;">
+    <h3 style="color: rgb(212, 16, 219);">All Ad Requests</h3>
+    <!-- Create New Adrequest -->
+    <div>
+        <!-- Add adrequest Button -->
+        <div class="row row-m">
+            <h1 class="button link-underline" style="color: rgb(30, 186, 21);" data-bs-toggle="modal" data-bs-target="#exampleModal">Add AD-request</h1>
+        </div>
+        <!-- Add adrequest Button End --></div>
+    {% for each_ad in Adrequest %}
+    {%if each_ad.campaign_id == campaign.campaign_id and each_ad.adrequest_level in [0,1] %}
+                <!-- 0=Pending(inf)  1=Accepted  2=Declined -->
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row col-2 border border-2 border-dark rounded-3 bg-m" style="margin-top: 2px; flex: auto;">
+                    <div class="col col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • {{( each_ad.influencer.user.user_handle ) if each_ad.influencer_id else ""  }} • Campaign No{{campaign.campaign_id}} • {{ "Accepted" if each_ad.adrequest_level == 1 else ("Completed" if each_ad.adrequest_level == 3 else ("Payment Released" if each_ad.adrequest_level == 4 else "Pending")) }} • ${{each_ad.adrequest_payment_amount //1}} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    <div class="col col-sm-3" style="text-align:center; margin: auto;">
+                        <div class="row" style="justify-content: space-between;">
+                        <div class="col"><a href="#2" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{each_ad.adrequest_id}}">Edit</a></div>
+                        <div class="col"><form action="{{ url_for('authentication.delete_adrequest', id=each_ad.adrequest_id,cd=campaign.campaign_id)}}" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% elif each_ad.campaign_id == campaign.campaign_id and each_ad.adrequest_level==3  %}
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row col-2 border border-2 border-dark rounded-3 bg-m" style="margin-top: 2px; flex: auto;">
+                    <div class="col col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • {{ each_ad.influencer.user.user_handle }} • Campaign No{{campaign.campaign_id}} • {{ "Completed" if each_ad.adrequest_level ==3 else "Pending" }} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    <div class="col col-sm-3 row" style="text-align:center; margin: auto;">
+                        <div class="col" style="justify-content: space-between;">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalv{{each_ad.adrequest_id}}">Verify</button>
+                        </div>
+                        <div class="col" style="justify-content: space-between;">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalpay{{each_ad.adrequest_id}}">Release Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elif each_ad.campaign_id == campaign.campaign_id and each_ad.adrequest_level==4  %}
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row col-2 border border-2 border-dark rounded-3 bg-m" style="margin-top: 2px; flex: auto;">
+                    <div class="col col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • {{ each_ad.influencer.user.user_handle }} • Campaign No{{campaign.campaign_id}} • {{ "Accepted" if each_ad.adrequest_level == 1 else ("Completed" if each_ad.adrequest_level == 3 else ("Payment Released" if each_ad.adrequest_level == 4 else "Pending")) }} • ${{each_ad.adrequest_payment_amount //1}} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    
+                </div>
+            </div>
+    {% endif %}
+                    
+
+                        <!-- Complete Model verify Start -->
+                        <div class="modal fade" id="exampleModalv{{each_ad.adrequest_id}}" tabindex="-1" aria-labelledby="exampleModalLabelv{{each_ad.adrequest_id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabelv{{each_ad.adrequest_id}}">Response</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                      <label  class="col-form-label">Message:</label>
+                                      <input disabled class="form-control" id="message-text" value="{{each_ad.message}}" ></input>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        <!-- Complete M0dal End -->
+                         <!-- Complete Model Start -->
+                        <div class="modal fade" id="exampleModalpay{{each_ad.adrequest_id}}" tabindex="-1" aria-labelledby="exampleModalLabelpay{{each_ad.adrequest_id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabelpay{{each_ad.adrequest_id}}">Response</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <form action="{{ url_for('authentication.adrequest_level', id=campaign.campaign_id)}}" method="POST">
+                                    <div class="mb-3">
+                                      <label for="pay" class="col-form-label">Payment:</label>
+                                      <input class="form-control" name="pay" id="pay" value="{{each_ad.adrequest_payment_amount//1}}" ></input>
+                                    </div>
+                                    <div hidden>
+                                        <input type="hidden" name="visit" value="False">
+                                        <input type="hidden" name="level" value="4">
+                                        <input type="hidden" name="adrequest_id" value="{{each_ad.adrequest_id}}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" >Send Payment</button>
+                                    </div>
+                                </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        <!-- Complete M0dal End -->
+        <!-- Modal Update -->
+ <div class="modal fade" id="exampleModal{{each_ad.adrequest_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{each_ad.adrequest_id}}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel{{each_ad.adrequest_id}}">Edit AD-request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{url_for('authentication.adrequests', id=campaign.campaign_id)}}" id="campaigncreateform">
+                <fieldset disabled>
+                <div class="mb-3">
+                  <label for="adreq_name" class="col-form-label">AD-request Name</label>
+                  <input type="text" class="form-control" id="adreq_name" value="AD-request No {{each_ad.adrequest_id}}">
+                </div>
+                </fieldset>
+                <fieldset hidden>
+                    <div class="mb-3">
+                      <label for="adrequest_id_u" class="col-form-label">Campaign Name</label>
+                      <input type="hidden" name="adrequest_id_u" id="adrequest_id_u" value="{{each_ad.adrequest_id}}">
+                    </div>
+                </fieldset>
+                <div class="mb-3" hidden>
+                  <label for="camp" class="col-form-label"></label>
+                  <input class="form-control" name="camp" id="camp" value="{{campaign.campaign_id}}"></input>
+                </div>
+                <div class="mb-3" hidden>
+                    <label for="visit" class="col-form-label"></label>
+                    <input class="form-control" name="visit" id="visit" value="False"></input>
+                  </div>
+                <div class="mb-3">
+                  <label for="description" class="col-form-label">Description </label>
+                  <input class="form-control" name="description" id="description" value="{{each_ad.adrequest_description}}" required></input>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="budget" id="budget" placeholder="Budget" value="{{each_ad.adrequest_payment_amount//1}}" required>
+                        <label for="budget" class="col-form-label">Your Budget </label>
+                    </div>
+                </div>
+                <div class="row">
+                <div class=" col-sm-5 mb-3">
+                    <label for="req" class="col-form-label" >Channel / Requirements</label>
+                    <select class="form-select" id="req" name="req" aria-label="Default select example" required>
+                        <option value="" selected>Open this select menu</option>
+                        <option value="1" {% if each_ad.adrequest_requerments==1 %} % selected="selected" {% endif %} >Fashion</option>
+                        <option value="2" {% if each_ad.adrequest_requerments==2 %} % selected="selected" {% endif %} >Food</option>
+                        <option value="3" {% if each_ad.adrequest_requerments==3 %} % selected="selected" {% endif %} >Technology</option>
+                        <option value="4" {% if each_ad.adrequest_requerments==4 %} % selected="selected" {% endif %} >Health</option>
+                        <option value="5" {% if each_ad.adrequest_requerments==5 %} % selected="selected" {% endif %} >Fitness</option>
+                        <option value="6" {% if each_ad.adrequest_requerments==6 %} % selected="selected" {% endif %} >Music</option>
+                        <option value="7" {% if each_ad.adrequest_requerments==7 %} % selected="selected" {% endif %} >Photography</option>
+                        <option value="8" {% if each_ad.adrequest_requerments==8 %} % selected="selected" {% endif %} >Art</option>
+                        <option value="9" {% if each_ad.adrequest_requerments==9 %} selected="selected" {% endif %} >Entertainment</option>
+                        <option value="10" {% if each_ad.adrequest_requerments==10 %} selected="selected" {% endif %} >Education</option>
+                        <option value="11" {% if each_ad.adrequest_requerments==11 %} selected="selected" {% endif %} >Business</option>
+                        <option value="12" {% if each_ad.adrequest_requerments==12 %} selected="selected" {% endif %} >Marketing</option>
+                    </select>
+                </div>
+               
+            </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal End -->
+        {% endfor %}    
+    
+    
+    </div>
+    <!-- Ad view Stop -->
+</div>
+
+{% endblock %}

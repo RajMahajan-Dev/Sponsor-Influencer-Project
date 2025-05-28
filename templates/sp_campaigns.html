@@ -1,0 +1,347 @@
+{% extends 'home.html' %}
+{% block title %}
+    Add Campaign
+{% endblock %}
+{% block head %}
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<style>
+    .offcanvas-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .row-m {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        margin-left: 600px;
+        margin-top: 300px;
+    }
+    .row-m a {
+        display: flex;
+    }
+    .row-m i {
+        margin: 60px;
+        margin-left: 90px;
+    }
+    
+</style>
+{% endblock %}
+{% block Body %}
+
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+<div>
+    <!-- Top Start -->
+    <div style="background-color: red; margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+        <div class="container-fluid" style="margin: 0px;">
+            <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+            <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Sponsor Dashboard > Campaign</h2></div>
+            
+            <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <hr  style="color: gold; opacity: 0.8;">
+            <div class="offcanvas-body">
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/profile">Profile</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard">Dashboard</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/find">Find</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/stats">Statistics</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+                </div>
+                </div>
+                <div style="margin-top: auto;">
+                    <div>
+                        <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+                    </div>
+                    <div>
+                        <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Top End -->
+<!-- Campaign Start -->
+{% if Campaign %}
+<div class="container" style="margin-right: 30px; margin-left: 50px; margin-top: 30px;">
+    <div class="row">
+    <div class="col-sm-10">
+        <h3 style="margin-top: 2px;">Your Campaigns</h3>
+    </div>
+    <div class="col-sm-2">
+        <a href="#" class="button link-underline link-underline-opacity-0" style="font-size: 25px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Create Campaign</a>
+    </div>
+    </div>
+        <div class="row row-cols-1 row-cols-md-3 g-xxl-5" style="display: flex;">
+            {% for each_campaign in Campaign %}
+            <div class="col" style="padding: 0px 50px 0px 50px;">
+            <div class="card ">
+                <img src="\static\camp.svg" class="card-img-top" alt="banner" height="200" style="filter: contrast(1.5) saturate(1.5);">
+                <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="{{(each_campaign.elapceddays/each_campaign.totaldays)*100}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar text-bg-success" style="width: {{((each_campaign.elapceddays/each_campaign.totaldays)*100)}}%">{{((each_campaign.elapceddays/each_campaign.totaldays)*100)//1}}%</div>
+                  </div>
+                  
+                <div class="card-body">
+                <h5 class="card-title">Campaign No {{each_campaign.campaign_id}}</h5>
+                <p class="card-text">{{each_campaign.campaign_description}}</p>
+                <form action="{{ url_for('authentication.adrequests', id=each_campaign.campaign_id) }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="campaign_id" value="{{ each_campaign.campaign_id }}">
+                    <input type="hidden" name="visit" value="True">
+                    <button type="submit" class="btn btn-success">View</button>
+                </form>                
+                <a href="#2" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{each_campaign.campaign_id}}">Edit</a>
+                <form action="{{ url_for('authentication.delete_campaign', id=each_campaign.campaign_id) }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="campaign_id" value="{{ each_campaign.campaign_id }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            </div>
+            </div>
+            <!-- Modal Update -->
+            <div class="modal fade" id="exampleModal{{each_campaign.campaign_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{each_campaign.campaign_id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel{{each_campaign.campaign_id}}">Edit Campaign</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" >
+                            <fieldset disabled>
+                            <div class="mb-3">
+                              <label for="Campaign_id" class="col-form-label">Campaign Name</label>
+                              <input type="text" class="form-control" id="Campaign_id" value="Campaign No {{each_campaign.campaign_id}}">
+                            </div>
+                            </fieldset>
+                            <fieldset hidden>
+                                <div class="mb-3">
+                                  <label for="campaign_id_u" class="col-form-label">Campaign Name</label>
+                                  <input type="hidden" name="campaign_id_u" id="campaign_id_u" value="{{ each_campaign.campaign_id }}">
+                                </div>
+                            </fieldset>
+                            <div class="mb-3">
+                              <label for="description" class="col-form-label">Description </label>
+                              <input class="form-control" name="description" id="description{{each_campaign.campaign_id}}" value="{{each_campaign.campaign_description}}" required></input>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">$</span>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="budget" id="budget" value="{{each_campaign.campaign_budget}}" placeholder="Budget" required>
+                                    <label for="budget" class="col-form-label">Total Budget </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="domain" class="col-form-label" >Domain</label>
+                                <select class="form-select" id="domain" name="domain" aria-label="Default select example" required>
+                                    <option selected >Open this select menu</option>
+                                    <option value="1" {% if each_campaign.campaign_domain==1 %} selected="selected" {% endif %}>Fashion</option>
+                                    <option value="2" {% if each_campaign.campaign_domain==2 %} selected="selected" {% endif %}>Food</option>
+                                    <option value="3" {% if each_campaign.campaign_domain==3 %} selected="selected" {% endif %}>Technology</option>
+                                    <option value="4" {% if each_campaign.campaign_domain==4 %} selected="selected" {% endif %}>Health</option>
+                                    <option value="5" {% if each_campaign.campaign_domain==5 %} selected="selected" {% endif %}>Fitness</option>
+                                    <option value="6" {% if each_campaign.campaign_domain==6 %} selected="selected" {% endif %}>Music</option>
+                                    <option value="7" {% if each_campaign.campaign_domain==7 %} selected="selected" {% endif %}>Photography</option>
+                                    <option value="8" {% if each_campaign.campaign_domain==8 %} selected="selected" {% endif %}>Art</option>
+                                    <option value="9" {% if each_campaign.campaign_domain==9 %} selected="selected" {% endif %}>Entertainment</option>
+                                    <option value="10" {% if each_campaign.campaign_domain==10 %} selected="selected" {% endif %}>Education</option>
+                                    <option value="11" {% if each_campaign.campaign_domain==11 %} selected="selected" {% endif %}>Business</option>
+                                    <option value="12" {% if each_campaign.campaign_domain==12 %} selected="selected" {% endif %}>Marketing</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sdate" class="col-form-label">Start Date</label>
+                                <input type="date" name="sdate" class="form-control" id="sdate" value="{{each_campaign.campaign_start_date}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edate" class="col-form-label">End Date</label>
+                                <input type="date" name="edate" class="form-control" id="edate" value="{{each_campaign.campaign_end_date}}" required>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!-- Modal End -->
+ <!-- Modal View -->
+ <div class="modal fade" id="exampleModalview{{each_campaign.campaign_id}}" tabindex="-1" aria-labelledby="exampleModalLabelview{{each_campaign.campaign_id}}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabelview{{each_campaign.campaign_id}}">View Campaign</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" >
+                <fieldset disabled>
+                <div class="mb-3">
+                  <label for="Campaign_id" class="col-form-label">Campaign Name</label>
+                  <input type="text" class="form-control" id="Campaign_id" value="Campaign No {{each_campaign.campaign_id}}">
+                </div>
+                
+                <fieldset hidden>
+                    <div class="mb-3">
+                      <label for="campaign_id_u" class="col-form-label">Campaign Name</label>
+                      <input type="hidden" name="campaign_id_u" id="campaign_id_u" value="{{ each_campaign.campaign_id }}">
+                    </div>
+                </fieldset>
+                <div class="mb-3">
+                  <label for="description" class="col-form-label">Description </label>
+                  <input class="form-control" name="description" id="description{{each_campaign.campaign_id}}" value="{{each_campaign.campaign_description}}" required></input>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="budget" id="budget" value="{{each_campaign.campaign_budget}}" placeholder="Budget" required>
+                        <label for="budget" class="col-form-label">Total Budget </label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="domain" class="col-form-label" >Domain</label>
+                    <select class="form-select" id="domain" name="domain" aria-label="Default select example" required>
+                        <option selected >Open this select menu</option>
+                        <option value="1" {% if each_campaign.campaign_domain==1 %} selected="selected" {% endif %}>Fashion</option>
+                        <option value="2" {% if each_campaign.campaign_domain==2 %} selected="selected" {% endif %}>Food</option>
+                        <option value="3" {% if each_campaign.campaign_domain==3 %} selected="selected" {% endif %}>Technology</option>
+                        <option value="4" {% if each_campaign.campaign_domain==4 %} selected="selected" {% endif %}>Health</option>
+                        <option value="5" {% if each_campaign.campaign_domain==5 %} selected="selected" {% endif %}>Fitness</option>
+                        <option value="6" {% if each_campaign.campaign_domain==6 %} selected="selected" {% endif %}>Music</option>
+                        <option value="7" {% if each_campaign.campaign_domain==7 %} selected="selected" {% endif %}>Photography</option>
+                        <option value="8" {% if each_campaign.campaign_domain==8 %} selected="selected" {% endif %}>Art</option>
+                        <option value="9" {% if each_campaign.campaign_domain==9 %} selected="selected" {% endif %}>Entertainment</option>
+                        <option value="10" {% if each_campaign.campaign_domain==10 %} selected="selected" {% endif %}>Education</option>
+                        <option value="11" {% if each_campaign.campaign_domain==11 %} selected="selected" {% endif %}>Business</option>
+                        <option value="12" {% if each_campaign.campaign_domain==12 %} selected="selected" {% endif %}>Marketing</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="sdate" class="col-form-label">Start Date</label>
+                    <input type="date" name="sdate" class="form-control" id="sdate" value="{{each_campaign.campaign_start_date}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edate" class="col-form-label">End Date</label>
+                    <input type="date" name="edate" class="form-control" id="edate" value="{{each_campaign.campaign_end_date}}" required>
+                </div>
+            </fieldset>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal End -->
+            {% endfor %}
+{% else %}
+<!-- Add Campaign Button -->
+<div class="row row-m">
+    <h1 style="display: flex; opacity: 0.8;">Add Campaign</h1>
+    <a href="#" class="link-underline link-underline-opacity-0" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='bx bx-message-alt-add' style="font-size: 70px; color: cyan; opacity: 0.5;"></i></a>
+</div>
+<!-- Add Campaign Button End -->
+{% endif %}
+        </div>
+    </div>
+    <!-- Campaign End -->
+    
+     
+    <!-- Modal Create -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Create Campaign</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="campaigncreateform">
+                        <fieldset disabled>
+                        <div class="mb-3">
+                          <label for="Campaign_name" class="col-form-label">Campaign Name</label>
+                          <input type="text" class="form-control" id="Campaign_name" value="Campaign No {{last_camp_id + 1}}">
+                          <input type="hidden" name="update" id="update" value="False">
+                        </div>
+                        </fieldset>
+                        <div class="mb-3">
+                          <label for="description" class="col-form-label">Description </label>
+                          <input class="form-control" name="description" id="description" required></input>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">$</span>
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="budget" id="budget" placeholder="Budget" required>
+                                <label for="budget" class="col-form-label">Total Budget </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="domain" class="col-form-label" >Domain</label>
+                            <select class="form-select" id="domain" name="domain" aria-label="Default select example" required>
+                                <option selected>Open this select menu</option>
+                                <option value="1">Fashion</option>
+                                <option value="2">Food</option>
+                                <option value="3">Technology</option>
+                                <option value="4">Health</option>
+                                <option value="5">Fitness</option>
+                                <option value="6">Music</option>
+                                <option value="7">Photography</option>
+                                <option value="8">Art</option>
+                                <option value="9">Entertainment</option>
+                                <option value="10">Education</option>
+                                <option value="11">Business</option>
+                                <option value="12">Marketing</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sdate" class="col-form-label">Start Date</label>
+                            <input type="date" name="sdate" class="form-control" id="sdate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edate" class="col-form-label">End Date</label>
+                            <input type="date" name="edate" class="form-control" id="edate" required>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Campaign</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    <!-- Modal End -->
+
+    
+
+    
+     
+</div>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'home.html' %}
+{% block title %}
+    Influencer Dashboard
+{% endblock %}
+{% block head %}
+<style>
+    .dashboard-container {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+    }
+    .dashboard-column {
+        flex: 1;
+        text-align: left;
+        padding: 10px;
+        box-shadow: 2px 2px 2px 2px #888888;
+    }
+    .offcanvas-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .container-fluid {
+        margin: 15px;
+        display: flex;
+        justify-content: flex-start;
+        overflow-x: hidden;
+    }
+</style>
+{% endblock %}
+{% block Body %}
+
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+<div class="row">
+    <!-- Top Start -->
+    <div style="background-color: red; margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+        <div class="container-fluid" style="margin: 0px;">
+            <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+            <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Influencer Dashboard</h2></div>
+            
+            <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <hr  style="color: gold; opacity: 0.8;">
+            <div class="offcanvas-body">
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/profile">Profile</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard/campaigns">Campaigns</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/find">Find</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/stats">Statistics</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+                </div>
+                <div style="margin-top: auto;">
+                    <div>
+                        <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+                    </div>
+                    <div>
+                        <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Top End -->
+    <div class="container" style="margin-top: 10px;">
+        <div class="dashboard-container">
+            <div class="dashboard-column" style="margin-right: 25px;">
+                <h3>Your total Followers </h3>
+                <h4>{{inf.influencer_no_of_followers}}</h4>
+            </div>
+            <div class="dashboard-column" >
+                <h3>Your total Revenue </h3>
+                <h4>{{inf.influencer_revenue//1}} $</h4>
+            </div>
+        </div>
+    </div>
+
+    <hr class="border border-primary border-1 opacity-50">
+
+    <!-- Campaign Start -->
+     <div class="container row" style="margin-right: 20px; margin-left: 20px;">
+        <h3 style="margin-top: 2px;">ActiveCampaigns</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-xxl-2" style="display: flex; justify-content:flex-start; margin-bottom: 10px;">
+        {% for camp in campaigns %}
+                <div class="col" style="padding: 0px 50px 0px 50px;">
+                <div class="card ">
+                    <img src="\static\camp.svg" class="card-img-top" alt="banner" height="200" style="filter: contrast(1.5) saturate(1.5);">
+                    <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="{{(camp.elapceddays/camp.totaldays)*100}}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar text-bg-success" style="width: {{((camp.elapceddays/camp.totaldays)*100)}}%">{{((camp.elapceddays/camp.totaldays)*100)//1}}%</div>
+                      </div>
+                    <div class="card-body">
+                    <h5 class="card-title">Campaign No {{camp.campaign_id}}</h5>
+                    <p class="card-text">{{camp.campaign_description}}</p>
+                    <form action="{{ url_for('authentication.adrequests', id=camp.campaign_id) }}" method="POST" style="display: inline;">
+                        <input type="hidden" name="campaign_id" value="{{ camp.campaign_id }}">
+                        <input type="hidden" name="visit" value="True">
+                        <button type="submit" class="btn btn-success">View</button>
+                    </form>
+                </div>
+                </div>
+                </div>
+        {% endfor %}
+    </div>
+    </div>
+        <!-- Campaign End -->
+        <hr class="border border-primary border-1 opacity-50">
+        <!-- Ad View start -->
+        <div class="container row" style="max-width: 98%;margin-right: 20px; margin-left: 35px;">
+            <h3>New Ad Request</h3>
+            {% for each_ad in Adrequest %}
+            {% if each_ad.adrequest_level == 0 %}
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row border border-2 border-dark rounded-3" style="margin-top: 2px; flex: auto;">
+                    <div class="col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • Private • Campaign No {{each_ad.campaign_id}} • {{ "Accepted" if each_ad.adrequest_level ==1 else "Pending" }} • ${{each_ad.adrequest_payment_amount //1}} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    <div class="col-sm-3 d-flex justify-content-end align-items-center">
+                        <div class="me-2"><button type="button" class="btn btn-primary">View</button></div>
+                        <div class="me-2"><form action="{{ url_for('authentication.adrequest_level' ) }}" method="POST">
+                            <input type="hidden" name="adrequest_id" value="{{each_ad.adrequest_id}}">
+                            <input type="hidden" name="level" value="1">
+                            <input type="hidden" name="visit" value="True">
+                            <input type="hidden" name="influencer_id" value="{{inf.influencer_id}}">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form></div>
+                        <div><form action="{{ url_for('authentication.delete_adrequest', id=each_ad.adrequest_id,cd=each_ad.campaign_id)}}" method="POST">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form></div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% for each_ad in ads %}
+            {% if each_ad.adrequest_level == 0 %}
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row border border-2 border-dark rounded-3" style="margin-top: 2px; flex: auto;">
+                    <div class="col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • Public • Campaign No {{each_ad.campaign_id}} • {{ "Accepted" if each_ad.adrequest_level ==1 else "Pending" }} • ${{each_ad.adrequest_payment_amount //1}} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    <div class="col-sm-3 d-flex justify-content-end align-items-center">
+                        <div class="me-2"><button type="button" class="btn btn-primary">View</button></div>
+                        <div class="me-2"><form action="{{ url_for('authentication.adrequest_level' ) }}" method="POST">
+                            <input type="hidden" name="adrequest_id" value="{{each_ad.adrequest_id}}">
+                            <input type="hidden" name="level" value="1">
+                            <input type="hidden" name="influencer_id" value="{{inf.influencer_id}}">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form></div>
+                        <div><form action="{{ url_for('authentication.delete_adrequest', id=each_ad.adrequest_id,cd=each_ad.campaign_id)}}" method="POST">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form></div>
+                    </div>
+                </div>
+                <div>
+                    Ad Request 1
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <!-- Ad view Stop -->
+</div>
+
+    
+{% endblock %}

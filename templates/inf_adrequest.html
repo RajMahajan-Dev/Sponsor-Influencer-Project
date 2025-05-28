@@ -1,0 +1,282 @@
+{% extends 'home.html' %}
+{% block title %}
+    Influencer Dashboard
+{% endblock %}
+{% block head %}
+<style>
+.offcanvas-body {
+    display: flex;
+    flex-direction: column;
+}
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body  {
+        height: 90%;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .bg-m {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(98, 225, 115, 0.162);
+        padding: 10px 30px 5px 30px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg {
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(98, 225, 115, 0.162);
+        padding: 30px 30px 300px 10px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg img {
+        width: 640px;
+        height: 360px;
+        border-radius: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .alert {
+        width: 70%;
+        margin: 0px;
+        height: 60px;
+        padding: 10px;
+        border-color: rgba(0, 0, 0, 0.5);
+    }
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        width: 50%;
+        height: 100%;
+    }
+    .width {
+        width: 437px;
+    }
+    .row-m a {
+        display: flex;
+    }
+    .row-m i {
+        margin: 60px;
+        margin-left: 90px;
+    }
+    
+</style>
+{% endblock %}
+{% block Body %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+<!-- Top Start -->
+<div style="background-color: red; margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+    <div class="container-fluid" style="margin: 0px;">
+        <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+        <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Influencer Dashboard > AD-Requests</h2></div>
+        
+        <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <hr  style="color: gold; opacity: 0.8;">
+        <div class="offcanvas-body">
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/profile">Profile</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard">Dashboard</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/find">Find</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/stats">Statistics</a>
+            </div>
+            <div>
+                <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+            </div>
+            <div style="margin-top: auto;">
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+                </div>
+                <div>
+                    <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Top End -->
+ 
+
+<div class="container bg">
+    <!-- Ad View start -->
+<div class="container" style="max-width: 93%;margin-right: 20px; margin-left: 40px;">
+    <h3 style="color: rgb(212, 16, 219);">All Ad Requests</h3>
+    <!-- Create New Adrequest -->
+    <div>
+        <!-- Add adrequest Button -->
+        <div class="row row-m">
+            <h1 class="button link-underline" style="color: rgb(30, 186, 21);" data-bs-toggle="modal" data-bs-target="#exampleModal">Add AD-request</h1>
+        </div>
+        <!-- Add adrequest Button End --></div>
+
+        <!-- Modal Create -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create AD-request</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="{{url_for('authentication.adrequests', id=campaign.campaign_id)}}" id="campaigncreateform">
+                <fieldset disabled>
+                <div class="mb-3">
+                  <label for="adreq_name" class="col-form-label">AD-request Name</label>
+                  <input type="text" class="form-control" id="adreq_name" value="AD-request No {{last_adreq_id + 1}}">
+                </div>
+                </fieldset>
+                <div class="mb-3" hidden>
+                  <label for="camp" class="col-form-label"></label>
+                  <input class="form-control" name="camp" id="camp" value="{{campaign.campaign_id}}"></input>
+                </div>
+                <div class="mb-3" hidden>
+                    <label for="visit" class="col-form-label"></label>
+                    <input class="form-control" name="visit" id="visit" value="False"></input>
+                  </div>
+                <div class="mb-3">
+                  <label for="description" class="col-form-label">Description </label>
+                  <input class="form-control" name="description" id="description" required></input>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="budget" id="budget" placeholder="Budget" required>
+                        <label for="budget" class="col-form-label">Your Budget </label>
+                    </div>
+                </div>
+                
+                    <div class=" mb-3">
+                        <label for="req" class="col-form-label">Channel / Requirements</label>
+                        <select class="form-select" id="req" name="req" aria-label="Default select example" required>
+                            <option value="None" selected>Open this select menu</option>
+                            <option value="1">Fashion</option>
+                            <option value="2">Food</option>
+                            <option value="3">Technology</option>
+                            <option value="4">Health</option>
+                            <option value="5">Fitness</option>
+                            <option value="6">Music</option>
+                            <option value="7">Photography</option>
+                            <option value="8">Art</option>
+                            <option value="9">Entertainment</option>
+                            <option value="10">Education</option>
+                            <option value="11">Business</option>
+                            <option value="12">Marketing</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    {% for each_ad in Adrequest %}
+    {%if each_ad.campaign_id == campaign.campaign_id and each_ad.adrequest_level in [1,3,4] %}
+                <!-- 0=Pending(inf)  1=Accepted  2=Declined 3= Completed 4=Payment_completed  5=Sent -->
+            <div class="row w-100" style="margin-left: 20px;">
+                <div class="row col-2 border border-2 border-dark rounded-3 bg-m" style="margin-top: 2px; flex: auto;">
+                    <div class="col col-sm-9">
+                        <h4 > Ad Request {{each_ad.adrequest_id}} • Campaign No{{campaign.campaign_id}} • {{ "Accepted" if each_ad.adrequest_level == 1 else ("Completed" if each_ad.adrequest_level == 3 else ("Payment Released" if each_ad.adrequest_level == 4 else "Pending")) }} • ${{each_ad.adrequest_payment_amount //1}} </h4>
+                        <p >{{each_ad.adrequest_description}}</p>
+                    </div>
+                    <div class="col col-sm-3" style="text-align:center; margin: auto;">
+                        <div class="row" style="justify-content: space-between;">
+                        <div class="col">
+                            {% if each_ad.adrequest_level in [3,4] %}
+                                <button hidden type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Completed</button>
+                            {% else %}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{each_ad.adrequest_id}}">Complete</button>
+                            {% endif %}
+
+                        <!-- Complete Model Start -->
+                        <div class="modal fade" id="exampleModal{{each_ad.adrequest_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{each_ad.adrequest_id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel{{each_ad.adrequest_id}}">Submit Work</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="{{ url_for('authentication.adrequest_level', id=campaign.campaign_id)}}" method="POST">
+                                    <div hidden>
+                                        <input type="text" name="visit" value="False">
+                                        <input type="text" name="level" value="3">
+                                        <input type="text" name="adrequest_id" value="{{each_ad.adrequest_id}}">
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="message" class="col-form-label">Message:</label>
+                                      <input class="form-control" name="message" id="message"></input>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Send message</button>
+                                </div>
+                                  </form>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        <!-- Complete M0dal End -->
+                    </div>
+                        <div class="col">
+                            {% if each_ad.adrequest_level ==4 %}
+                                <form hidden action="{{ url_for('authentication.delete_adrequest', id=each_ad.adrequest_id,cd=campaign.campaign_id)}}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+                            {% else %}
+                                <form action="{{ url_for('authentication.delete_adrequest', id=each_ad.adrequest_id,cd=campaign.campaign_id)}}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+                            {% endif %}
+                        
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% endfor %}    
+    
+    
+    </div>
+    <!-- Ad view Stop -->
+</div>
+
+{% endblock %}

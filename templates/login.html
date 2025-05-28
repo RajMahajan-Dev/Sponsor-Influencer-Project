@@ -1,0 +1,134 @@
+{% extends 'home.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% block head %}
+<!-- Nav Bar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid" style="max-width: max-content;">
+        <a class="navbar-brand" href="/">
+          <img src="/static/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+          Sponsor & Influencer
+        </a>
+      </div>
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/login">Login</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/signup_sponsor">Sponsor</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/signup_influencer">Influencer</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<style>
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body  {
+        /* The image used */
+        background-image: url("/static/1.jpg");
+
+        /* Full height */
+        height: 90%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .bg {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 100px 50px 100px 50px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg img {
+        width: 640px;
+        height: 360px;
+        border-radius: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .alert {
+        width: 70%;
+        margin: 0px;
+        height: 60px;
+        padding: 10px;
+        border-color: rgba(0, 0, 0, 0.5);
+    }
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        width: 50%;
+        height: 100%;
+    }
+    .width {
+        width: 437px;
+    }
+</style>
+{% endblock %}
+{% block Body %}
+<!-- All Alert messages here -->
+ {% if warnings %}
+    <div class="flex">
+        {% for warning in warnings %}
+        <div class="alert alert-warning alert-dismissible fade show " role="alert">
+            <p>{{warning}}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+ {% endif %}
+ {% with messages = get_flashed_messages(category_filter=["success"]) %}
+ {% if messages %}
+     <div class="flex">
+         {% for message in messages %}
+         <div class="alert alert-success alert-dismissible fade show" role="alert">
+             <p>{{ message }}</p>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+         {% endfor %}
+     </div>
+ {% endif %}
+{% endwith %}
+ 
+<div class="container bg">
+    <form method="POST" action="/login" class ='width' >
+        <div class="mb-3 ">
+            <label for="username" class="form-label">UserName</label>
+            <input type="text" name="username" class="form-control " id="username" placeholder="Enter UserName Here">
+        </div>
+        <div class="mb-3">
+            <label for="pwd" class="form-label">Password</label>
+            <input type="password" name="pwd" class="form-control" id="pwd" placeholder="Create Password">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Remember me</label>
+        </div>
+        <div class="flex">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a action="/signup_influencer" class="focus-ring-light link-offset-1-hover link-underline-dark left" href="/signup_influencer">Signup as Influencer</a>
+        <a action="/signup_sponsor" class="focus-ring-light link-offset-1-hover link-underline-dark left" href="/signup_sponsor">Signup as Sponsor</a>
+        </div>
+    </form>
+    <img src="/static/login.jpg" >
+</div>
+{% endblock %}

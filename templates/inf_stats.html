@@ -1,0 +1,123 @@
+{% extends 'home.html' %}
+{% block title %}
+    Influencer Stats
+{% endblock %}
+{% block head %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Adrequest Status'],
+          ['Fashion',{{count.1}}],
+          ['Food',{{count.2}}],
+          ['Technology',{{count.3}}],
+          ['Health',{{count.4}}],
+          ['Fitness',{{count.5}}],
+          ['Music',{{count.6}}],
+          ['Photography',{{count.7}}],
+          ['Art',{{count.8}}],
+          ['Entertainment',{{count.9}}],
+          ['Education',{{count.10}}],
+          ['Business',{{count.11}}],
+          ['Marketing',{{count.12}}],
+        ]);
+
+        var options = {
+          title: 'Adrequest Status',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Adrequest Status'],
+          ['Fashion',{{count2.1}}],
+          ['Food',{{count2.2}}],
+          ['Technology',{{count2.3}}],
+          ['Health',{{count2.4}}],
+          ['Fitness',{{count2.5}}],
+          ['Music',{{count2.6}}],
+          ['Photography',{{count2.7}}],
+          ['Art',{{count2.8}}],
+          ['Entertainment',{{count2.9}}],
+          ['Education',{{count2.10}}],
+          ['Business',{{count2.11}}],
+          ['Marketing',{{count2.12}}],
+        ]);
+
+        var options = {
+          title: 'Influencer in Diffrent Domains',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d_1'));
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock %}
+{% block Body %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+{% if messages %}
+ <div class="flex position-absolute top-0 end-0" style="width: 500px;">
+     {% for message in messages %}
+     <div class="alert alert-success alert-dismissible fade show"  role="alert">
+         <p>{{ message }}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+{% endif %}
+{% endwith %}
+<!-- Top Start -->
+<div style="background-color: rgb(120, 244, 106); margin: 0px; padding-top: 10px;padding-bottom: 2px;">
+  <div class="container-fluid" style="margin: 0px;">
+      <div><button class="btn" style="position:absolute;top: 10px;left: 0;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><img src="/static/menu.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"></button></div>
+      <div style="margin-left: 40px;"><h2 style="font-style: italic; font-family:'Times New Roman', Times, serif; font-weight: bold; text-shadow: 2px 2px 2px white;">Influencer Dashboard > Statistics</h2></div>
+      
+      <div class="offcanvas offcanvas-start" style="width: 300px; background-color: black;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+      <div class="offcanvas-header">
+          <h4 class="offcanvas-title" style="color: lightgreen;" id="offcanvasWithBothOptionsLabel">Menu</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <hr  style="color: gold; opacity: 0.8;">
+      <div class="offcanvas-body">
+        <div>
+          <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/profile">Profile</a>
+        </div>
+          <div>
+              <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/dashboard">Dashboard</a>
+          </div>
+          <div>
+            <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/logout">Logout</a>
+        </div>
+          <div style="margin-top: auto;">
+              <div>
+                  <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/about">About</a>
+              </div>
+              <div>
+                  <a class="page-link" style="font-size:25px; margin: 15px; color: white;" href="/support">Support</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<!-- Top End -->
+<div class="row">
+  <div class="col" id="piechart_3d" style="width: 900px; height: 500px;"></div>
+  <div class="col" id="piechart_3d_1" style="width: 900px; height: 500px;"></div>
+
+</div>
+    
+
+{% endblock %}
+

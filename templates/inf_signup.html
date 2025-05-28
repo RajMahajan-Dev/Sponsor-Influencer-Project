@@ -1,0 +1,157 @@
+{% extends 'home.html' %}
+{% block title %}
+    Influencer Signup
+{% endblock %}
+{% block head %}
+<!-- Nav Bar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid" style="max-width: max-content;">
+        <a class="navbar-brand" href="/">
+          <img src="/static/logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+          Sponsor & Influencer
+        </a>
+      </div>
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/login">Login</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/signup_sponsor">Sponsor</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/signup_influencer">Influencer</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<style>
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body  {
+        /* The image used */
+        background-image: url("/static/1.jpg");
+
+        /* Full height */
+        height: 90%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .bg {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px ;
+        border-radius: 10px;
+        margin-top: 50px;
+    }
+    .bg img {
+        width: 50%;
+        height: 50%;
+        border-radius: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .alert {
+        width: 70%;
+        margin: 0px;
+        height: 60px;
+        padding: 10px;
+        border-color: rgba(0, 0, 0, 0.5);
+    }
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        width: 50%;
+        height: 100%;
+    }
+</style>
+{% endblock %}
+{% block Body %}
+<!-- All Alert messages here -->
+ {% if warnings %}
+    <div class="flex">
+        {% for warning in warnings %}
+        <div class="alert alert-warning alert-dismissible fade show " role="alert">
+            <p>{{warning}}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+ {% endif %}
+ 
+ 
+<div class="container bg">
+    <img src="/static/influencer.jpg" >
+    <form method="POST" action="/signup_influencer">
+        <div class='mb-3' >
+            <label for="name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Enter Name Here" required>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">UserName</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Enter UserName Here" aria-describedby="inputGroupPrepend" required>
+        </div>
+        <div class="mb-3">
+            <label for="pwd" class="form-label">Password</label>
+            <input type="password" name="pwd" class="form-control" id="pwd" placeholder="Create Password" required>
+        </div>
+        <div class="mb-3">
+            <label for="confpwd" class="form-label">Confirm Password</label>
+            <input type="password" name="confpwd" class="form-control" id="confpwd" placeholder="Enter your password again" required>
+        </div>
+        <div class="mb-3">
+            <label for="followers" class="form-label">No Of Followers</label>
+            <select class="form-select" name="followers" id="followers" required>
+                <option value="Novice Luminary">0-500</option>
+                <option value="Ascending Virtuoso">500-2.5k</option>
+                <option value="Rising Maven">2.5k-10k</option>
+                <option value="Distinguished Icon">10k-50k</option>
+                <option value="Celebrated Titan">50k-1M</option>
+                <option value="Legendary Influencer">1M+</option>
+            </select>
+        </div>
+        <label for="social_media" class="form-label">Social Media</label>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+            
+            <input type="checkbox" class="btn-check" id="social_media[0]" name="social_media[]" value="1" autocomplete="off" >
+            <label class="btn btn-outline-primary" for="social_media[0]">Instagram</label>
+          
+            <input type="checkbox" class="btn-check" id="social_media[1]" name="social_media[]" value="2" autocomplete="off">
+            <label class="btn btn-outline-primary" for="social_media[1]">Twitter</label>
+          
+            <input type="checkbox" class="btn-check" id="social_media[2]" name="social_media[]" value="3" autocomplete="off">
+            <label class="btn btn-outline-primary" for="social_media[2]">FaceBook</label>
+
+            <input type="checkbox" class="btn-check" id="social_media[3]" name="social_media[]" value="4" autocomplete="off">
+            <label class="btn btn-outline-primary" for="social_media[3]">Youtube</label>
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+              <label class="form-check-label" for="invalidCheck">
+                Agree to terms and conditions
+              </label>
+            </div>
+          </div>
+        <div class="flex">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a action="/login" class="focus-ring-light link-offset-1-hover link-underline-dark left" href="/login">Already Registered?</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'home.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% block head %}
+
+<style>
+    html {
+        height: 100%;
+        margin: 0;
+    }
+
+    body  {
+        /* The image used */
+        background-color: rgb(185, 161, 207);
+
+        /* Full height */
+        height: 90%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .bg {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 100px 50px 100px 50px;
+        border-radius: 10px;
+        margin-top : 50px;
+    }
+    .bg img {
+        width: 640px;
+        height: 360px;
+        border-radius: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .alert {
+        width: 70%;
+        margin: 0px;
+        height: 60px;
+        padding: 10px;
+        border-color: rgba(0, 0, 0, 0.5);
+    }
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        width: 50%;
+        height: 100%;
+    }
+    .width {
+        width: 437px;
+    }
+</style>
+{% endblock %}
+{% block Body %}
+<!-- All Alert messages here -->
+
+ 
+<div class="container bg">
+    <p style="font-size: larger;"> This Is platform build for Good Sake</p>
+</div>
+{% endblock %}
